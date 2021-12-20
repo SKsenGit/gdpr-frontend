@@ -1,0 +1,32 @@
+{
+    "users": [
+      {
+        "name": "Arto Hellas",
+        "login": "arthel",
+        "password": "00000000",
+        "email": "arthel@gmail.com",
+        "roles": [0,1,2]
+      },
+      {
+        "name": "Martti Tienari",
+        "login": "martien",
+        "password": "11111111",
+        "email": "martien@gmail.com",
+        "roles": [0,1]
+      },
+      {
+        "name": "Arto Järvinen",
+        "login": "arjarv",
+        "password": "11111111",
+        "email": "arjarv@gmail.com",
+        "roles": [0]
+      },
+      {        
+        "name": "Lea Kutvonen",
+        "login": "lekut",
+        "password": "11111111",
+        "email": "lekut@gmail.com",
+        "roles": [0]
+      }
+    ]
+  }
