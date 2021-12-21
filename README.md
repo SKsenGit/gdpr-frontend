@@ -1,3 +1,7 @@
+1. 'npm install'  to add npm_modules locally
+2. 'npm start' to run app
+3. 'npm run server' to run json-server
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

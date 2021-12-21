@@ -10,12 +10,12 @@ class App extends React.Component {
       isGuest:true,
       user_login:'',
       user_name:'',
-      user_token:'',
+      access_token:'',
       user_roles:[]      
     }
   }
   componentDidMount() {
-    //check user_token
+    
   }
 
   render() {   
