@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    color: #58504D;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.575em;
+    background-color: white;
+}
+* {
+    box-sizing: border-box;
+}
+#logo_icon {
+    background-color: white;
+    padding: 8px;
+    height: 100px;
+    width: 100px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+  
+
+.form-inner {
+    text-align: center;
+}
+.button {
+    background-color: blue;
+    color: white;
+    height: 40px;
+    width: 200px;
+}
