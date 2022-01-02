@@ -62,6 +62,15 @@ function App() {
     setSubpage(SUBPAGE.LOGIN)
   }
 
+  const DeleteUser = () => {
+    if (window.confirm('Do you want to delete ' + users[loggedUserIndex].name)) {
+      axios.delete('http://localhost:3001/users/' + users[loggedUserIndex].id)
+      setUsers(users.filter(user => users[loggedUserIndex].id !== user.id))
+    }
+    setLoggedUserIndex(-1)
+    setSubpage(SUBPAGE.LOGIN)
+  }
+
   function getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -154,7 +163,8 @@ function App() {
             <img id="display_file" />
 
             <button className="button" onClick={uploadData}>Save</button>&nbsp;&nbsp;&nbsp;
-            <button className="button" onClick={Logout}>Logout</button>
+            <button className="button" onClick={Logout}>Logout</button><br /><br /><br /><br />
+            <button className="button" onClick={DeleteUser}>Delete User</button>
           </div>
         );
 
