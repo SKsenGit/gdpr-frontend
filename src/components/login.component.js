@@ -106,6 +106,18 @@ export default class Login extends Component {
 									/>
 								</div>
 
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <Input
+                    type="password"
+                    className="form-control"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.onChangePassword}
+                    validations={[required]}
+                  />
+                </div>
+
 								<div className="form-group">
 									<button
 										className="btn btn-primary btn-block"
