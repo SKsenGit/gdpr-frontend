@@ -3,7 +3,7 @@ import EXIF from 'exif-js';
 import UserService from "../services/user.service";
 import axios from "axios";
 import ImageUpload from "react-images-upload";
-
+import Image from "../components/image";
 
 export default class Meta extends Component {
   constructor(props) {
@@ -11,10 +11,12 @@ export default class Meta extends Component {
 
     this.state= {
       content: "",
-      images: []
+      images: [],
+      viewImages: false
     };
 
     this.onDrop = this.onDrop.bind(this);
+    //this.getExif = this.getExif.bind(this);
   }
 
   getExif(props) {
@@ -25,7 +27,10 @@ export default class Meta extends Component {
     return exifData 
   }
 
-  
+
+  //even though metadata is not being used anywhere, it somehow effects execution flow, handle with care
+  //do not delete matadata unless you know what you are doing
+
   onDrop(imageFile, imageDataURL) {
     let index = imageFile.length -1;
     let newImage = new Object
@@ -33,21 +38,49 @@ export default class Meta extends Component {
     let metadata
       while (index >= 0) {
         metadata = this.getExif(imageFile[index])
-        console.log(metadata);
-        newImage = {"file":imageFile[index], "url":imageDataURL[index], "metadata":metadata };
+        //console.log(metadata);
+        newImage = { "file":imageFile[index], "url":imageDataURL[index] };
         index -=1;
         imagesArray.push(newImage)
       }
       this.setState({ images: this.state.images.concat(imagesArray) });
   } 
 
+    display123() {
+      let value = 123
+      return value
+    }
+
+    toggleVisible = () => {
+      this.setState({ viewImages: !this.state.viewImages})
+    }
+
+    displayImages() {
+      switch(this.state.viewImages) {
+        case true:
+          return(
+            <div>
+              <ul>
+                {this.state.images.map((item, i) => <Image key={i} item={item}/>)}
+              </ul>
+            </div>
+          );
+        case false:
+          return(
+            <div>
+            </div>
+          )
+      }
+    }
+
   render() {
-    const images  = this.state.images
-    const displayImages = () => images.map((item, i) => (
-                                  <li key={i} className="list-group-item"><img className="img-preview"src={item.url} />
-                                    <p>{item.metadata}</p>
-                                  </li>));
-    
+    const showMetaData = 
+      this.state.viewImages ?
+        this.state.viewImages:
+        !this.state.viewImages
+
+    const label = this.state.viewImages ? "Hide metadata" : "Show metadata"
+
     return (
       <div className="container">
         <header className="jumbotron">
@@ -56,8 +89,14 @@ export default class Meta extends Component {
             withPreview={true} 
             maxFileSize={10485760}
            />
-           <span>{displayImages()}123</span>
-         
+           <div>
+            <button className="btn btn-primary btn-block" onClick={this.toggleVisible}>
+              {label}
+            </button>
+            <div>
+              {this.displayImages()}
+            </div>
+           </div>
         </header>
       </div>
     );

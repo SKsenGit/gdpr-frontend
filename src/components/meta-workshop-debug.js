@@ -3,16 +3,15 @@ import EXIF from 'exif-js';
 import UserService from "../services/user.service";
 import axios from "axios";
 import ImageUpload from "react-images-upload";
-import Image from "../components/image";
 
-export default class Meta2 extends Component {
+
+export default class Meta1 extends Component {
   constructor(props) {
     super(props);
 
     this.state= {
       content: "",
-      images: [],
-      viewImages: false
+      images: []
     };
 
     this.onDrop = this.onDrop.bind(this);
@@ -42,20 +41,12 @@ export default class Meta2 extends Component {
       this.setState({ images: this.state.images.concat(imagesArray) });
   } 
 
-    display123() {
-      let value = 123
-      return value
-    }
-
   render() {
     const images  = this.state.images
-    const displayImages = () => {
-      <ul>
-        {images.map((item, i) => <Image key={i} item={item}/>)}
-      </ul>
-  
-    }
-
+    const displayImages = () => images.map((item, i) => (
+                                  <li key={i} className="list-group-item"><img className="img-preview"src={item.url} />
+                                    <p>{item.metadata}</p>
+                                  </li>));
     
     return (
       <div className="container">
@@ -65,14 +56,8 @@ export default class Meta2 extends Component {
             withPreview={true} 
             maxFileSize={10485760}
            />
-           <div>
-            <button className="btn btn-primary btn-block" onClick={123}>
-              Display metadata
-            </button>
-            <div>
-              {this.displayImages()}
-            </div>
-           </div>
+           <span>{displayImages()}123</span>
+         
         </header>
       </div>
     );
