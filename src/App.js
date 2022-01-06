@@ -12,6 +12,7 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import Meta from "./components/meta-workshop";
 
 class App extends Component {
   constructor(props) {
@@ -54,6 +55,12 @@ class App extends Component {
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link to={"/meta"} className="nav-link">
+                Metadata demo
               </Link>
             </li>
 
@@ -115,6 +122,7 @@ class App extends Component {
         <div className="container mt-3">
           <Routes>
             <Route exact path="/home" element={<Home />} />
+            <Route exact path="/meta" element={<Meta />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
