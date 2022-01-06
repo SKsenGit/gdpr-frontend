@@ -2,6 +2,13 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import {
+  useLocation,
+  useNavigate,
+  useParams
+} from "react-router-dom";
+
+
 
 import AuthService from "../services/auth.service";
 
@@ -15,8 +22,24 @@ const required = value => {
   }
 };
 
-export default class Login extends Component {
-  constructor(props) {
+function withRouter(Component) {
+  function ComponentWithRouterProp(props) {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return (
+      <Component
+        {...props}
+        router={{ location, navigate, params }}
+      />
+    );
+  }
+
+  return ComponentWithRouterProp;
+}
+
+class Login extends Component {
+  constructor(props) {    
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -55,8 +78,9 @@ export default class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.history.push("/profile");
-          window.location.reload();
+          this.props.router.navigate("/profile");
+          
+
         },
         error => {
           const resMessage =
@@ -149,3 +173,4 @@ export default class Login extends Component {
 		);
 	}
 }
+export default withRouter(Login)
