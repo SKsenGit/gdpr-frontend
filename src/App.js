@@ -80,72 +80,33 @@ function App() {
     });
   }
 
-  function getRemoveEXIF(file) {
-    return new Promise((resolve, reject) => {
-      const fr = new FileReader();
-      fr.onload = () => resolve(removeEXIF(fr.result))
-      fr.readAsArrayBuffer(file);
-      fr.onerror = e => reject(e)
-    })
-    //window.open(URL.createObjectURL(this.files[0]), "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
-  }
 
-  // https://stackoverflow.com/a/27638728
-  function removeEXIF(file) {
-    const dv = new DataView(file);
-    let offset = 0, recess = 0;
-    let pieces = [];
-    let i = 0;
-
-    if (dv.getUint16(offset) == 0xffd8) {
-      offset += 2;
-      let app1 = dv.getUint16(offset);
-      offset += 2;
-
-      while (offset < dv.byteLength) {
-        if (app1 === 0xffe1) {
-          pieces[i] = { recess: recess, offset: offset - 2 };
-          recess = offset + dv.getUint16(offset);
-          i++;
-        } else if (app1 === 0xffda) {
-          break;
-        }
-        offset += dv.getUint16(offset);
-        app1 = dv.getUint16(offset);
-        offset += 2;
-      }
-
-      if (pieces.length > 0) {
-        let newPieces = [];
-        pieces.forEach(function (v) {
-          newPieces.push(file.slice(v.recess, v.offset));
-        }, this);
-        newPieces.push(file.slice(recess));
-        const br = new Blob(newPieces, { type: 'image/jpeg' });
-
-        return br
-      }
-    }
-  }
 
   const uploadData = () => {
     let uploadedFile = document.querySelector('#uploaded_file').files[0];
+    const formData = new FormData();
+    formData.append('file', uploadedFile)
+    //console.log(formData.fi)
+    //formData.append('')
+
     let data = {
       uploadedText: document.querySelector('#uploaded_text').value,
       uploadedFile: null
     }
 
-    getRemoveEXIF(uploadedFile).then(exifRMedFile => {
-      getBase64(exifRMedFile).then(
-        base64file => {
-          document.querySelector("#display_file").src = base64file
-          data.uploadedFile = base64file
-          axios.patch('http://localhost:3001/users/' + users[loggedUserIndex].id, data)
-          setUsers(prevUsers =>
-            prevUsers.map((el, ind) =>
-              ind === loggedUserIndex ? { ...el, uploadedText: data.uploadedText, uploadedFile: data.uploadedFile } : el))
-        });
+    axios.post('http://localhost:3002/api/removeExif', formData, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      'responseType': 'blob'
+    }).then(response => {
+      getBase64(response.data).then(base64file => {
+        document.querySelector("#display_file").src = base64file
+        data.uploadedFile = base64file
+        axios.patch('http://localhost:3001/users/' + users[loggedUserIndex].id, data)
+      })
     })
+
 
   }
 
@@ -158,6 +119,8 @@ function App() {
             <form>
               <input id="uploaded_text" name="text" className="free_text" type="text" /><br /><br />
               <input id="uploaded_file" name="file" type="file" />
+              { // <button className="button">Save</button>
+              }
             </form><br />
 
             <img id="display_file" />
@@ -180,17 +143,7 @@ function App() {
     <div className='App'>
       {
         displaySubpage()
-      /*
-        (subpage == "MAIN") ? (<div className="welcome">
-          <h2>Welcome <span>{adminUser.name}</span></h2>
-
-          <form>
-            <input className="free_text" type="text" /><br /><br />
-            <input type="file" />
-          </form><br />
-          <button className="button" onClick={Logout}>Logout</button>
-        </div>) : (<LoginForm Login={Login} error={error} />)
-      */}
+      }
     </div>
   )
 }
