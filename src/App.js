@@ -12,6 +12,8 @@ import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
+import GdprImage from "./components/gdprimage.component";
+import GdprMetadata from "./components/gdprmetadata.component"
 
 class App extends Component {
   constructor(props) {
@@ -50,12 +52,25 @@ class App extends Component {
           <Link to={"/"} className="navbar-brand">
             IF GDPR
           </Link>
+
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link to={"/home"} className="nav-link">
                 Home
               </Link>
             </li>
+
+            <li className="nav-item">
+              <Link to={"/gdprimage"} className="nav-link">
+                GDPR image
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/gdprmetadata"} className="nav-link">
+                GDPR metadata
+              </Link>
+            </li>
+
 
             {showModeratorBoard && (
               <li className="nav-item">
@@ -80,6 +95,7 @@ class App extends Component {
                 </Link>
               </li>
             )}
+
           </div>
 
           {currentUser ? (
@@ -110,10 +126,11 @@ class App extends Component {
               </li>
             </div>
           )}
+
         </nav>
 
         <div className="container mt-3">
-        <Routes>
+          <Routes>
             <Route exact path="/home" element={<Home />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/login" element={<Login />} />
@@ -122,8 +139,10 @@ class App extends Component {
             <Route path="/user" element={<BoardUser />} />
             <Route path="/mod" element={<BoardModerator />} />
             <Route path="/admin" element={<BoardAdmin />} />
-        </Routes>
-         
+            <Route path="/gdprimage" element={<GdprImage />} />
+            <Route path="/gdprmetadata" element={<GdprMetadata />} />
+          </Routes>
+
         </div>
       </div>
     );
