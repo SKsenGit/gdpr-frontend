@@ -2,40 +2,57 @@ import React, { Component } from "react";
 import piexif from "piexifjs"
 
 
+const Metadata= (props)=>{
+    let exif = props.exif;
+    if (exif == null){
+        return (<div className="metadata"></div>)
+    }
+    else{
+    return (
+            <div className="metadata">
+                {Object.keys(exif).map(keySection =>
+                <div>
+                    <h1>{keySection}</h1>
+                    {keySection !== 'thumbnail' ? Object.keys(exif[keySection]).map(keyRow =>
+                        <label>
+                            <input type="checkbox" id={keySection +'.' + keyRow} onChange={props.onChange}/>
+                            {"   " + piexif.TAGS[keySection][keyRow]['name'] + ":  " + exif[keySection][keyRow]}
+                        </label>):
+                        <label>
+                            <input type="checkbox" id="thumbnail" onChange={props.onChange} />
+                              {"   " + exif[keySection]}
+                        </label>
+                    } 
+                </div>)
+                }
+            </div>
+        )
+    }
 
+     
+
+   
+}
 
 class GdprMetadata extends Component {
     constructor(props) {
         super(props);
         this.state = {
             image: null,
-            imgBase64: ""
+            imgBase64: "",
+            metadata:null,
+            removingData:{}
 
         };
-
-        this.onImageChange = this.onImageChange.bind(this);
-        this.getMetadata = this.getMetadata.bind(this);
-        this.debugExif = this.debugExif.bind(this);
+        
     }
 
 
-    debugExif = (exif) => {
-        for (const ifd in exif) {
-            if (ifd === 'thumbnail') {
-                const thumbnailData = exif[ifd] === null ? "null" : exif[ifd];
-                console.log(`- thumbnail: ${thumbnailData}`);
-            } else {
-                console.log(`- ${ifd}`);
-                for (const tag in exif[ifd]) {
-                    console.log(`    - ${piexif.TAGS[ifd][tag]['name']}: ${exif[ifd][tag]}`);
-                }
-            }
-        }
-    }
+
     onImageChange = event => {
 
         if (event.target.files && event.target.files[0]) {
-            // console.log(event.target.files[0]);
+            
             let img = event.target.files[0];
 
             let reader = new FileReader();
@@ -53,30 +70,38 @@ class GdprMetadata extends Component {
         }
     };
 
-    getMetadata = () => {
-        let textMyMetadata = document.getElementById("myMetadata");
-        textMyMetadata.textContent = "Getting metadata...";
-        console.log(this.state.imgBase64);
+    getMetadata = () => {        
         let metadata = piexif.load(this.state.imgBase64);
-        this.debugExif(metadata);
-        console.log(metadata);
+        let doubleMetadataKeys = {};
+        Object.keys(metadata).map(keySection=> doubleMetadataKeys[keySection] = {});
+        this.setState({
+            metadata: metadata,
+            removingData: doubleMetadataKeys
+        })
+        
 
     }
+    onCheckboxChange = (event) => {        
+        let removingData = this.state.removingData;
+        let keys = event.target.id.split(".");
+        console.log(removingData);
+        removingData[keys[0]][keys[1]] = event.target.checked;     
 
+    }
+    
     render() {
         return (
             <div>
                 <div>
                     <div>
-                        <img src={this.state.image} />
-                        <h1>Select Image</h1>
+                        <img src={this.state.image} alt="Select JPEG file"/>                        
                         <input type="file" name="myImage" onChange={this.onImageChange} />
                         <button onClick={this.getMetadata}>
                             Get metadata
                         </button>
                     </div>
                     <div >
-                        <textarea id="myMetadata" />
+                        <Metadata exif = {this.state.metadata} onChange = {this.onCheckboxChange} />
                     </div>
                 </div>
             </div>

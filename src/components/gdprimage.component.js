@@ -67,13 +67,12 @@ class GdprImage extends Component {
     
   };
 
-  drawRect=(ctx,startX,startY,wight, height)=>{
-    ctx.filter = 'blur(10px)';
+  drawRect=(ctx,startX,startY,wight, height)=>{    
     ctx.rect(startX, startY, wight, height);
     ctx.strokeStyle = "blue";
     ctx.lineWidth = 3;
     ctx.stroke();
-    ctx.filter = 'blur(0px)';
+    
   };
 
   drawLandmarks=(ctx,landmarks)=>{           
@@ -100,7 +99,7 @@ class GdprImage extends Component {
         
         if (predictions.length > 0) {
             ctx.clearRect(0,0,cnvs.width, cnvs.height);
-
+            message.textContent = "Faces were found!";
             ctx.drawImage(img,0,0);
             
             for (let i = 0; i < predictions.length; i++) {
@@ -116,8 +115,8 @@ class GdprImage extends Component {
                 const end = predictions[i].bottomRight;
                 const size = [end[0] - start[0], end[1] - start[1]];
                 
-                this.blurArea(ctx,img, start[0], start[1], size[0], size[1]);
-                //this.drawRect(ctx,start[0], start[1], size[0], size[1]);   
+                //this.blurArea(ctx,img, start[0], start[1], size[0], size[1]);
+                this.drawRect(ctx,start[0], start[1], size[0], size[1]);   
                                             
           
                 if (annotateBoxes) {
