@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import piexif from "piexifjs"
 
+const importantTags = {'GPS':{
+                                0:true
+                            }
+
+}
 
 const Metadata= (props)=>{
     let exif = props.exif;
@@ -15,7 +20,7 @@ const Metadata= (props)=>{
                     <h1>{keySection}</h1>
                     {keySection !== 'thumbnail' ? Object.keys(exif[keySection]).map(keyRow =>
                         <label>
-                            <input type="checkbox" id={keySection +'.' + keyRow} onChange={props.onChange}/>
+                            <input type="checkbox" id={keySection +'.' + keyRow} onChange={props.onChange} defaultChecked = {props.removingData[keySection][keyRow]?true:false}/>
                             {"   " + piexif.TAGS[keySection][keyRow]['name'] + ":  " + exif[keySection][keyRow]}
                         </label>):
                         <label>
@@ -27,11 +32,7 @@ const Metadata= (props)=>{
                 }
             </div>
         )
-    }
-
-     
-
-   
+    } 
 }
 
 class GdprMetadata extends Component {
@@ -47,7 +48,7 @@ class GdprMetadata extends Component {
         
     }
 
-
+ 
 
     onImageChange = event => {
 
@@ -72,11 +73,12 @@ class GdprMetadata extends Component {
 
     getMetadata = () => {        
         let metadata = piexif.load(this.state.imgBase64);
-        let doubleMetadataKeys = {};
-        Object.keys(metadata).map(keySection=> doubleMetadataKeys[keySection] = {});
+        let removingData = {};
+        Object.keys(metadata).map(keySection=> removingData[keySection] = {});
+
         this.setState({
             metadata: metadata,
-            removingData: doubleMetadataKeys
+            removingData: removingData
         })
         
 
@@ -101,7 +103,7 @@ class GdprMetadata extends Component {
                         </button>
                     </div>
                     <div >
-                        <Metadata exif = {this.state.metadata} onChange = {this.onCheckboxChange} />
+                        <Metadata exif = {this.state.metadata} removingData = {this.state.removingData} onChange = {this.onCheckboxChange} />
                     </div>
                 </div>
             </div>

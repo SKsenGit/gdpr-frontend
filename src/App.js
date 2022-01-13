@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -48,6 +49,11 @@ class App extends Component {
 
     return (
       <div>
+        <Helmet>
+                <meta charSet="utf-8" />
+                <title>GDPR processing</title>
+                <meta name="description" content="GDPR data detecting and processing" />
+        </Helmet>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
             IF GDPR

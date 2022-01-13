@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from "@tensorflow/tfjs";
-
-
-
+//Change blur pixel number depend on rectangle size
 
 
 class GdprImage extends Component {
@@ -13,7 +11,8 @@ class GdprImage extends Component {
       model:null,
       image: null,
       imgWidth:0,
-      imgHeight:0
+      imgHeight:0,
+      predictions:null
 
     };
 
@@ -42,7 +41,8 @@ class GdprImage extends Component {
     if (event.target.files && event.target.files[0]) {       
       let img = event.target.files[0];      
       this.setState({
-        image: URL.createObjectURL(img)        
+        image: URL.createObjectURL(img),
+        predictions: null        
       });
     }
   };
@@ -56,22 +56,24 @@ class GdprImage extends Component {
 
   blurArea =(ctx,img ,startX,startY,width, height) =>{
     
-    startX = parseInt(startX)-10;
-    startY = parseInt(startY)-10;
-    width = parseInt(width)+15;
-    height = parseInt(height)+15;
+    startX = parseInt(startX)-30;
+    startY = parseInt(startY)-30;
+    width = parseInt(width)+60;
+    height = parseInt(height)+60;
 
-    ctx.filter = 'blur(8px)';
+    ctx.filter = 'blur(15px)';
     ctx.drawImage(img, startX, startY, width, height, startX, startY, width, height);
     ctx.filter = 'blur(0px)';
     
   };
 
-  drawRect=(ctx,startX,startY,wight, height)=>{    
+  drawRect=(ctx,startX,startY,wight, height, areaNumber)=>{    
     ctx.rect(startX, startY, wight, height);
     ctx.strokeStyle = "blue";
     ctx.lineWidth = 3;
     ctx.stroke();
+    ctx.font = "30px Arial";
+    ctx.strokeText(areaNumber, startX, startY-5);
     
   };
 
@@ -83,7 +85,28 @@ class GdprImage extends Component {
       ctx.fillRect(x, y, 5, 5);
     }
   }
+  onClickBlurAreas = ()=>{
+    let cnvs = document.getElementById("myCanvas");
+      let ctx = cnvs.getContext("2d");
+      let img = document.getElementById("sourceImg");
+      ctx.clearRect(0,0,cnvs.width, cnvs.height);            
+      ctx.drawImage(img,0,0);
+      let predictions = this.state.predictions;
+      for (let i = 0; i < predictions.length; i++) {
+        if (predictions[i].blurIt){
+          const start = predictions[i].topLeft;
+                const end = predictions[i].bottomRight;
+                const size = [end[0] - start[0], end[1] - start[1]];
+                
+                this.blurArea(ctx,img, start[0], start[1], size[0], size[1]);
+        }
+      }
+  }
+  onCheckedArea = (event) => {
+    this.state.predictions[parseInt(event.target.id)].blurIt = event.target.checked;
+    console.log(this.state.predictions);
 
+  }
   predictionFunction= async () => {
       
       const returnTensors = false;
@@ -98,6 +121,7 @@ class GdprImage extends Component {
         img, returnTensors, flipHorizontal, annotateBoxes);
         
         if (predictions.length > 0) {
+          
             ctx.clearRect(0,0,cnvs.width, cnvs.height);
             message.textContent = "Faces were found!";
             ctx.drawImage(img,0,0);
@@ -106,17 +130,19 @@ class GdprImage extends Component {
                 if (returnTensors) {
                   predictions[i].topLeft = predictions[i].topLeft.arraySync();
                   predictions[i].bottomRight = predictions[i].bottomRight.arraySync();
+                  
                   if (annotateBoxes) {
                     predictions[i].landmarks = predictions[i].landmarks.arraySync();
                   }
                 }
-          
+                predictions[i]['blurIt'] = false;
+                
                 const start = predictions[i].topLeft;
                 const end = predictions[i].bottomRight;
                 const size = [end[0] - start[0], end[1] - start[1]];
                 
                 //this.blurArea(ctx,img, start[0], start[1], size[0], size[1]);
-                this.drawRect(ctx,start[0], start[1], size[0], size[1]);   
+                this.drawRect(ctx,start[0], start[1], size[0], size[1], i+1);   
                                             
           
                 if (annotateBoxes) {
@@ -124,7 +150,7 @@ class GdprImage extends Component {
                   
                 }
               }
-            
+              this.setState({predictions:predictions});                         
         }
         else{
           
@@ -140,9 +166,19 @@ class GdprImage extends Component {
             <img id="sourceImg" onLoad={this.onImgLoad} src={this.state.image} alt="Select JPEG file" />
             <div>
             <div id = "noFaceDetection"></div>
+            <div id = "findedAreas">
+                  {this.state.predictions !==  null ?Object.keys(this.state.predictions).map(index =>
+                        <label>
+                            <input type="checkbox" id={index} onChange={this.onCheckedArea}/>
+                            {"  Area " + (parseInt(index)+1)}
+                        </label>):<label></label> }
+            </div>
               <input type="file" name="myImage" onChange={this.onImageChange} />
               <button onClick={this.predictionFunction}>
                 Start Detect
+              </button>
+              <button onClick={this.onClickBlurAreas}>
+                Blur checked areas
               </button>
             </div>
           </div>
@@ -150,6 +186,7 @@ class GdprImage extends Component {
             <canvas id="myCanvas" width={this.state.imgWidth} height={this.state.imgHeight} style={{ backgroundColor: "transparent" }}
             />
           </div>
+
         </div>
       </div>
     );
