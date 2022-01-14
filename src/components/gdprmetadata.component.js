@@ -48,7 +48,28 @@ class GdprMetadata extends Component {
         
     }
 
- 
+    extractImageFileExtensionFromBase64 = (base64Data) => {
+        return base64Data.substring("data:image/".length, base64Data.indexOf(";base64"))
+    }
+
+    downloadBase64File = (base64Data, filename) => {
+        var element = document.createElement('a');
+        element.setAttribute('href', base64Data);
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
+
+    handleDownloadClick = (event) => {
+        event.preventDefault()
+        const image = this.state.imgBase64
+        const fileExtenstion = this.extractImageFileExtensionFromBase64(this.state.imgBase64)
+        const myFilename = "fileName." + fileExtenstion
+        this.downloadBase64File(image, myFilename)
+
+    }
 
     onImageChange = event => {
 
@@ -100,6 +121,11 @@ class GdprMetadata extends Component {
                         <input type="file" name="myImage" onChange={this.onImageChange} />
                         <button onClick={this.getMetadata}>
                             Get metadata
+                        </button>
+                    </div>
+                    <div>
+                        <button onClick={this.handleDownloadClick}>
+                            Download Image
                         </button>
                     </div>
                     <div >
