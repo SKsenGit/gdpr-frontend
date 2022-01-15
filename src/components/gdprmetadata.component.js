@@ -42,8 +42,8 @@ class GdprMetadata extends Component {
             image: null,
             imgBase64: "",
             metadata:null,
-            removingData:{}
-
+            removingData:{},
+            metadataStorage:null
         };
         
     }
@@ -72,15 +72,10 @@ class GdprMetadata extends Component {
     }
 
     onImageChange = event => {
-
-        if (event.target.files && event.target.files[0]) {
-            
+        if (event.target.files && event.target.files[0]) { 
             let img = event.target.files[0];
-
             let reader = new FileReader();
-
             reader.onloadend = (e) => {
-
                 this.setState({
                     imgBase64: reader.result
                 });
@@ -94,6 +89,8 @@ class GdprMetadata extends Component {
 
     getMetadata = () => {        
         let metadata = piexif.load(this.state.imgBase64);
+        console.log(metadata)
+        console.log(this.state.metadataStorage)
         let removingData = {};
         Object.keys(metadata).map(keySection=> removingData[keySection] = {});
 
@@ -101,9 +98,13 @@ class GdprMetadata extends Component {
             metadata: metadata,
             removingData: removingData
         })
-        
-
+        if (this.state.metadataStorage === null) {
+            this.setState({
+                metadataStorage: metadata
+            })
+        }
     }
+
     onCheckboxChange = (event) => {        
         let removingData = this.state.removingData;
         let keys = event.target.id.split(".");
@@ -112,6 +113,16 @@ class GdprMetadata extends Component {
 
     }
     
+    injectMetadata = (event) => {
+        event.preventDefault()
+        const imageNoData = piexif.remove(this.state.imgBase64)
+        let exifStr = piexif.dump(this.state.metadataStorage)
+        let image = piexif.insert(exifStr, imageNoData)
+        const fileExtenstion = this.extractImageFileExtensionFromBase64(image)
+        const myFilename = "fileName." + fileExtenstion
+        this.downloadBase64File(image, myFilename)
+    }
+
     render() {
         return (
             <div>
@@ -126,6 +137,9 @@ class GdprMetadata extends Component {
                     <div>
                         <button onClick={this.handleDownloadClick}>
                             Download Image
+                        </button>
+                        <button onClick={this.injectMetadata}>
+                            Download and Replace Metadata
                         </button>
                     </div>
                     <div >
