@@ -116,12 +116,11 @@ class GdprMetadata extends Component {
     injectMetadata = (event) => {
         event.preventDefault()
         const imageNoData = piexif.remove(this.state.imgBase64)
-        //let injection = this.state.metadataStorage
         let exifStr = piexif.dump(this.state.metadataStorage)
-        let image2 = piexif.insert(exifStr, imageNoData)
-        const fileExtenstion = this.extractImageFileExtensionFromBase64(image2)
+        let image = piexif.insert(exifStr, imageNoData)
+        const fileExtenstion = this.extractImageFileExtensionFromBase64(image)
         const myFilename = "fileName." + fileExtenstion
-        this.downloadBase64File(image2, myFilename)
+        this.downloadBase64File(image, myFilename)
     }
 
     render() {
