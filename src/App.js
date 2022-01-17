@@ -15,6 +15,7 @@ import BoardModerator from "./components/board-moderator.component";
 import BoardAdmin from "./components/board-admin.component";
 import GdprImage from "./components/gdprimage.component";
 import GdprMetadata from "./components/gdprmetadata.component"
+import ImageAnalisys from "./components/image-analysis.component"
 
 class App extends Component {
   constructor(props) {
@@ -65,17 +66,24 @@ class App extends Component {
                 Home
               </Link>
             </li>
-
+            
             <li className="nav-item">
-              <Link to={"/gdprimage"} className="nav-link">
-                GDPR image
+              <Link to={"/analysis"} className="nav-link">
+                Image analysis
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to={"/gdprmetadata"} className="nav-link">
-                GDPR metadata
-              </Link>
-            </li>
+            <div style={{ display: "none" }}>
+              <li className="nav-item">
+                <Link to={"/gdprimage"} className="nav-link">
+                  GDPR image
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to={"/gdprmetadata"} className="nav-link">
+                  GDPR metadata
+                </Link>
+              </li>
+            </div>
 
 
             {showModeratorBoard && (
@@ -105,7 +113,7 @@ class App extends Component {
           </div>
 
           {currentUser ? (
-            <div className="navbar-nav ml-auto">
+            <div className="navbar-nav ms-auto" >
               <li className="nav-item">
                 <Link to={"/profile"} className="nav-link">
                   {currentUser.username}
@@ -118,7 +126,7 @@ class App extends Component {
               </li>
             </div>
           ) : (
-            <div className="navbar-nav ml-auto">
+            <div className="navbar-nav ms-auto">
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
                   Login
@@ -147,6 +155,7 @@ class App extends Component {
             <Route path="/admin" element={<BoardAdmin />} />
             <Route path="/gdprimage" element={<GdprImage />} />
             <Route path="/gdprmetadata" element={<GdprMetadata />} />
+            <Route path="/analysis" element={<ImageAnalisys />} />
           </Routes>
 
         </div>
