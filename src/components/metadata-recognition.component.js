@@ -86,17 +86,22 @@ class MetadataRecognition extends Component {
                 removingData[removeTag.Section][removeTag.Tag] = true;
                 haveImportantTags = true;
             }
-        }        
-        
-        this.props.transferData(metadata,removingData);
-        let message = document.getElementById("statusMessage");
+        }
         
         this.setState({
             metadata: metadata,
             removingData: removingData,
             detectedGDPR:haveImportantTags
+            
         })
         
+        let metadataNotification = "change default metadata notification"
+        if (this.state.detectedGDPR === true) {
+            metadataNotification = "This picture contains metadata that can be linked to a geographical location and/or device model. This data will be removed autmatically upon image download. For more options use metadata tool below."
+        } else {
+            metadataNotification = "The system did not detect any important GDPR-related data."
+        }
+        this.props.transferData(metadata, removingData, metadataNotification);
     }
 
     onCheckboxChange = (event) => {        

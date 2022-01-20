@@ -17,6 +17,8 @@ import GdprImage from "./components/gdprimage.component";
 import GdprMetadata from "./components/gdprmetadata.component"
 import ImageAnalisys from "./components/image-analysis.component"
 
+import { Container, Row } from "react-bootstrap"
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -50,6 +52,8 @@ class App extends Component {
 
     return (
       <div>
+        <Container>
+          <Row>
         <Helmet>
                 <meta charSet="utf-8" />
                 <title>GDPR processing</title>
@@ -159,6 +163,8 @@ class App extends Component {
           </Routes>
 
         </div>
+        </Row>
+        </Container>
       </div>
     );
   }

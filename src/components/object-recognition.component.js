@@ -104,7 +104,7 @@ class ObjectRecognition extends Component {
             this.setState({detectedGDPR:true})
             ctx.clearRect(0,0,cnvs.width, cnvs.height);            
             ctx.drawImage(img,0,0);
-            
+
             for (let i = 0; i < predictions.length; i++) {
                 if (returnTensors) {
                   predictions[i].topLeft = predictions[i].topLeft.arraySync();
@@ -130,11 +130,19 @@ class ObjectRecognition extends Component {
                 }
               }
               this.setState({predictions:predictions});                         
-        }
+        } 
         else{
           this.setState({detectedGDPR:false})
           
         }
+        let faceRecognitionNotification
+        if (this.state.detectedGDPR === true) {
+          faceRecognitionNotification = "GDPR related data were detected on the image. Use face recognition tool below to blur detected areas."
+        } else {
+          faceRecognitionNotification = "No GDPR related objects were detected on the image."
+        }
+        this.props.transferData(faceRecognitionNotification);
+
         
   }
   render() {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DragAndDrop from "./UI components/draganddrop";
 import ObjectRecognition from "./object-recognition.component"
 import MetadataRecognition from "./metadata-recognition.component"
-import { Container, Row } from "react-bootstrap"
+import { Container, Row, Col } from "react-bootstrap"
 import piexif from "piexifjs"
 
 import '../App.css'
@@ -15,7 +15,9 @@ class ImageAnalysis extends Component {
             file: null,
             startDetecting: false,
             metadata: null,
-            removingData: null
+            removingData: null,
+            metadataNotification:"default metadata notification",
+            faceRecognitionNotification: "working..."
 
         };
     }
@@ -50,7 +52,7 @@ class ImageAnalysis extends Component {
 
     };
 
-    getMetadata = (metadata, removingData) => {
+    getMetadata = (metadata, removingData, metadataNotification) => {
 
         if (metadata !== null) {
             this.setState({
@@ -62,8 +64,20 @@ class ImageAnalysis extends Component {
                 removingData: removingData
             })
         }
-
+        if (metadataNotification) {
+            this.setState({
+                metadataNotification: metadataNotification
+            })
+        }
     };
+
+    getFaceRecognitionNotification = (faceRecognitionNotification) => {
+        if (faceRecognitionNotification) {
+            this.setState({
+                faceRecognitionNotification: faceRecognitionNotification
+            })
+        }
+    }
 
     convertCanvasBlobToBase64 = (blob) => {
         return new Promise((resolve, reject) => {
@@ -145,7 +159,9 @@ class ImageAnalysis extends Component {
             file: null,
             startDetecting: false,
             metadata: null,
-            removingData: null
+            removingData: null,
+            metadataNotification: null,
+            faceRecognitionNotification: null
         })
     }
 
@@ -166,6 +182,7 @@ class ImageAnalysis extends Component {
             <div>
                 <Container>
                     <Row>
+                      <Col xs={12} md={8}>
                         {this.state.image === null ?
                             <div>
                                 <DragAndDrop
@@ -175,7 +192,6 @@ class ImageAnalysis extends Component {
                                 </DragAndDrop>
                             </div> :
                             <div>
-                                
                                 <canvas id="myCanvas" style={{ backgroundColor: "transparent" }} />
                                 <div style={{ display: "none" }}>
                                     <img id="sourceImg" onLoad={this.onImgLoad} src={this.state.image} alt="Select JPEG file" />
@@ -186,6 +202,32 @@ class ImageAnalysis extends Component {
                                 </div>
                                 
                             </div>}
+                        </Col>
+
+                            <Col xs={12} md={4}>
+                                <Row>
+                                    {this.state.image === null ?
+                                        <div></div>:
+                                            <div>
+                                                {this.state.metadataNotification}
+                                            </div>}
+                                            
+                                </Row>
+                                <br />
+                                <Row>
+                                    {this.state.image === null ?
+                                        <div></div>:
+                                            <div>
+                                                {this.state.faceRecognitionNotification}
+                                            </div>}
+                                    
+                                </Row>
+                            </Col>
+                       
+                    </Row>
+                    <Row>
+                        <Col>test</Col>
+                        <Col>test</Col>
                     </Row>
                     {this.state.startDetecting ?
                         <div>
@@ -195,6 +237,7 @@ class ImageAnalysis extends Component {
                                     <ObjectRecognition
                                         image={document.getElementById("sourceImg")}
                                         canvas={document.getElementById("myCanvas")}
+                                        transferData={this.getFaceRecognitionNotification}
                                     />
                                 </div>
                             </Row>
