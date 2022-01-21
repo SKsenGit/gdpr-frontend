@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DragAndDrop from "./UI components/draganddrop";
 import ObjectRecognition from "./object-recognition.component"
 import MetadataRecognition from "./metadata-recognition.component"
-import { Container, Row } from "react-bootstrap"
+import { Container, Row, Col, Card, Accordion, Spinner } from "react-bootstrap"
 import piexif from "piexifjs"
 
 import '../App.css'
@@ -15,7 +15,9 @@ class ImageAnalysis extends Component {
             file: null,
             startDetecting: false,
             metadata: null,
-            removingData: null
+            removingData: null,
+            metadataNotification:"default metadata notification",
+            faceRecognitionNotification: "Working..."
 
         };
     }
@@ -50,7 +52,7 @@ class ImageAnalysis extends Component {
 
     };
 
-    getMetadata = (metadata, removingData) => {
+    getMetadata = (metadata, removingData, metadataNotification) => {
 
         if (metadata !== null) {
             this.setState({
@@ -62,8 +64,20 @@ class ImageAnalysis extends Component {
                 removingData: removingData
             })
         }
-
+        if (metadataNotification) {
+            this.setState({
+                metadataNotification: metadataNotification
+            })
+        }
     };
+
+    getFaceRecognitionNotification = (faceRecognitionNotification) => {
+        if (faceRecognitionNotification) {
+            this.setState({
+                faceRecognitionNotification: faceRecognitionNotification
+            })
+        }
+    }
 
     convertCanvasBlobToBase64 = (blob) => {
         return new Promise((resolve, reject) => {
@@ -145,10 +159,12 @@ class ImageAnalysis extends Component {
             file: null,
             startDetecting: false,
             metadata: null,
-            removingData: null
+            removingData: null,
+            metadataNotification: null,
+            faceRecognitionNotification: "Working..."
         })
     }
-
+    /*
     collapseContent = (event) => {        
         let btn = event.target;
 
@@ -160,12 +176,13 @@ class ImageAnalysis extends Component {
             content.style.display = "block";
     }
     }
-
+    */
     render() {
         return (
-            <div>
+            <div>              
                 <Container>
                     <Row>
+                      <Col xs={12} md={8}>
                         {this.state.image === null ?
                             <div>
                                 <DragAndDrop
@@ -175,7 +192,6 @@ class ImageAnalysis extends Component {
                                 </DragAndDrop>
                             </div> :
                             <div>
-                                
                                 <canvas id="myCanvas" style={{ backgroundColor: "transparent" }} />
                                 <div style={{ display: "none" }}>
                                     <img id="sourceImg" onLoad={this.onImgLoad} src={this.state.image} alt="Select JPEG file" />
@@ -186,31 +202,71 @@ class ImageAnalysis extends Component {
                                 </div>
                                 
                             </div>}
+                        </Col>
+
+                            <Col xs={12} md={4}>
+                                <Row>
+                                    
+                                    {this.state.image === null ?
+                                        <div></div>:
+                                            <Card>
+                                                {this.state.metadataNotification === "The system did not detect any important GDPR-related metadata."
+                                                 ? <Card.Header className="notification">Notification</Card.Header> 
+                                                 : <Card.Header className="attention">Attention!</Card.Header> }
+                                                        <Card.Body>
+                                                            {this.state.metadataNotification}
+                                                        </Card.Body>
+                                            </Card>}
+                                         
+                                </Row>
+                               
+                                <Row>
+                                    {this.state.image === null ?
+                                        <div></div>:
+                                            <Card>
+                                                {this.state.faceRecognitionNotification === "No GDPR related objects were detected on the image."
+                                                 ? <Card.Header className="notification">Notification</Card.Header> 
+                                                 : <Card.Header className="attention">Attention!</Card.Header> }
+                                                        <Card.Body>
+                                                            {this.state.faceRecognitionNotification} < br/>
+                                                            {this.state.faceRecognitionNotification === "Working..." 
+                                                            ? <Spinner animation="border" variant="primary" /> :<></>}
+                                                        </Card.Body>
+                                            </Card>}
+                                    
+                                </Row>
+                            </Col>
+                       
                     </Row>
+                    <br />
+                    <Row>
                     {this.state.startDetecting ?
-                        <div>
-                            <Row>
-                                <button type="button" class="collapsible" onClick = {this.collapseContent}>Faces recognition section</button>
-                                <div class="content">
+                        <div >
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header className="bg-default">Faces recognition section</Accordion.Header>
+                                    <Accordion.Body className="bg-default">
                                     <ObjectRecognition
                                         image={document.getElementById("sourceImg")}
                                         canvas={document.getElementById("myCanvas")}
+                                        transferData={this.getFaceRecognitionNotification}
                                     />
-                                </div>
-                            </Row>
-                            <Row>                                
-                                <button type="button" class="collapsible" onClick = {this.collapseContent}>Metadata section</button>
-                                <div class="content">
-                                <MetadataRecognition
-                                    file={this.state.file}
-                                    transferData={this.getMetadata}
-                                />
-                                </div>
-                            </Row>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                                <Accordion.Item eventKey="1">
+                                    <Accordion.Header>Metadata section</Accordion.Header>
+                                    <Accordion.Body className="bg-default">
+                                        <MetadataRecognition
+                                            file={this.state.file}
+                                            transferData={this.getMetadata}
+                                        />
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
                         </div> :
                         null
                     }
-                    
+                    </Row>
                 </Container>
 
             </div>

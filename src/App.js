@@ -16,6 +16,9 @@ import BoardAdmin from "./components/board-admin.component";
 import GdprImage from "./components/gdprimage.component";
 import GdprMetadata from "./components/gdprmetadata.component"
 import ImageAnalisys from "./components/image-analysis.component"
+import logo from "./logo.svg"
+
+import { Container, Row, Navbar } from "react-bootstrap"
 
 class App extends Component {
   constructor(props) {
@@ -50,14 +53,26 @@ class App extends Component {
 
     return (
       <div>
+        <Container>
+          <Row>
         <Helmet>
                 <meta charSet="utf-8" />
                 <title>GDPR processing</title>
                 <meta name="description" content="GDPR data detecting and processing" />
         </Helmet>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav className="ifActiveTextColor navbar navbar-expand ifMenuBackgroundColor">
           <Link to={"/"} className="navbar-brand">
-            IF GDPR
+            <Container>
+              <Navbar.Brand href="#home">
+                <img
+                  src={logo}
+                  width="60"
+                  height="60"
+                  className="d-inline-block align-top"
+                  alt="React Bootstrap logo"
+                />
+              </Navbar.Brand>
+            </Container>
           </Link>
 
           <div className="navbar-nav mr-auto">
@@ -159,6 +174,8 @@ class App extends Component {
           </Routes>
 
         </div>
+        </Row>
+        </Container>
       </div>
     );
   }
