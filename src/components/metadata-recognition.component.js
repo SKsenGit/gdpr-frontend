@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import piexif from "piexifjs"
+import { Row, Col } from "react-bootstrap"
 
 const importantTags =   [ {Section:"0th",Tag:271},{Section:"0th",Tag:272},{Section:"GPS",Tag:1},
                         {Section:"GPS",Tag:2},{Section:"GPS",Tag:3},{Section:"GPS",Tag:4},{Section:"GPS",Tag:5},
@@ -20,24 +21,29 @@ const Metadata= (props)=>{
     }
     else{
     return (
+        <div>
             <div className="metadata">
-                {Object.keys(exif).map(keySection =>
-                <div>
-                    {keySection !== 'thumbnail' && Object.keys(exif[keySection]).length !== 0 ? 
-                    <h4>{keySection}</h4> :
-                     null}
-                    {keySection !== 'thumbnail' ?                    
-                    Object.keys(exif[keySection]).map(keyRow =>
-                        <label>
-                            <input type="checkbox" id={keySection +'.' + keyRow} onChange={props.onChange} defaultChecked = {props.removingData[keySection][keyRow]?true:false}/>
-                            {"   " + piexif.TAGS[keySection][keyRow]['name'] + ":  " + exif[keySection][keyRow]}
-                        </label>):
-                        null
-                       
-                    } 
-                </div>)
-                }
+                <Row>
+                    {Object.keys(exif).map(keySection =>
+                    <Col xs={12} md={4}>
+                        {keySection !== 'thumbnail' && Object.keys(exif[keySection]).length !== 0 ? 
+                        <h4>{keySection}</h4> :
+                        null}
+                        {keySection !== 'thumbnail' ?                    
+                        Object.keys(exif[keySection]).map(keyRow =>
+                            <label>
+                                <input type="checkbox" id={keySection +'.' + keyRow} onChange={props.onChange} defaultChecked = {props.removingData[keySection][keyRow]?true:false}/>
+                                {"   " + piexif.TAGS[keySection][keyRow]['name'] + ":  " + exif[keySection][keyRow]}
+                            </label>):
+                            null
+                        
+                        }
+                        
+                    </Col>)
+                    }
+                </Row>
             </div>
+        </div>
         )
     } 
 }
@@ -99,7 +105,7 @@ class MetadataRecognition extends Component {
         if (this.state.detectedGDPR === true) {
             metadataNotification = "This picture contains metadata that can be linked to a geographical location and/or device model. This data will be removed autmatically upon image download. For more options use metadata tool below."
         } else {
-            metadataNotification = "The system did not detect any important GDPR-related data."
+            metadataNotification = "The system did not detect any important GDPR-related metadata."
         }
         this.props.transferData(metadata, removingData, metadataNotification);
     }

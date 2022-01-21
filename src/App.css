@@ -1,3 +1,4 @@
+
 label {
   display: block;
   margin-top: 10px;
@@ -50,11 +51,13 @@ label {
 
 }
 .button {
-  background-color: white;
-  color: black;
+  background-color: #ede6e1;
+  color: #331e11;
   border: 2px solid #e7e7e7;
-  border-radius: 12px;
-  margin-right: 10px
+  border-radius: 3px;
+  margin-right: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+  margin-top: 8px;
 }
 .button:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
@@ -81,9 +84,72 @@ label {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #f1f1f1;
+  background-color: #faf9f7;
 }
 
 #myCanvas {
   max-width: 100%;
+  box-shadow: 3px 3px 5px 3px rgba(0,0,0,.2);
+}
+
+/* IF branding guidlines colors */
+.ifMenuBackgroundColor {
+  background-color: #f6f3f0
+}
+
+.ifActiveTextColor {
+  color: #331e11
+}
+
+.navbar {
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+}
+
+.nav-link {
+  color: #331e11
+}
+
+.nav-link:hover {
+  color: #331e11;
+}
+
+a:hover {
+  color: #331e11;
+  text-decoration: underline;
+}
+
+a {
+  color: #331e11;
+}
+
+.div {
+  color: #331e11;
+}
+
+body {
+  color: #331e11;
+  background-color: #faf9f7;
+}
+
+.notification {
+  background-color: #b5ede8;
+}
+
+.attention {
+  background-color: #ffc9a6;
+}
+
+.card{
+  margin-top: 5px;
+  background-color: #f1ece8;
+}
+
+.accordion {
+  box-shadow: 0 3px 5px 0 rgba(0,0,0,.2);
+  
+}
+
+.bg-default {
+  background-color: #f6f3f0;
+  color: #331e11;
 }
