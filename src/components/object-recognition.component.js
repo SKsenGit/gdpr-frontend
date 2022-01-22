@@ -35,13 +35,13 @@ class ObjectRecognition extends Component {
   
 
   blurArea =(ctx,img ,startX,startY,width, height) =>{
-    
-    startX = parseInt(startX)-30;
-    startY = parseInt(startY)-30;
-    width = parseInt(width)+60;
-    height = parseInt(height)+60;
+    let expandArea = width/2.5;
+    startX = parseInt(startX)-(expandArea/2);
+    startY = parseInt(startY)-(expandArea/2);
+    width = parseInt(width)+expandArea;
+    height = parseInt(height)+expandArea;
 
-    ctx.filter = 'blur(15px)';
+    ctx.filter = 'blur('+width/10+'px)';
     ctx.drawImage(img, startX, startY, width, height, startX, startY, width, height);
     ctx.filter = 'blur(0px)';
     
@@ -50,9 +50,10 @@ class ObjectRecognition extends Component {
   drawRect=(ctx,startX,startY,wight, height, areaNumber)=>{    
     ctx.rect(startX, startY, wight, height);
     ctx.strokeStyle = "blue";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = wight/50;
     ctx.stroke();
-    ctx.font = "30px Arial";
+
+    ctx.font = ctx.lineWidth*10+ "px Arial";
     ctx.strokeText(areaNumber, startX, startY-5);
     
   };
