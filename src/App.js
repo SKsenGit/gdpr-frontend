@@ -60,8 +60,9 @@ class App extends Component {
                 <title>GDPR processing</title>
                 <meta name="description" content="GDPR data detecting and processing" />
         </Helmet>
-        <nav className="ifActiveTextColor navbar navbar-expand ifMenuBackgroundColor">
-          <Link to={"/"} className="navbar-brand">
+        
+        <Navbar collapseOnSelect  expand="md" className="ifActiveTextColor navbar ifMenuBackgroundColor">
+        <Link to={"/"} className="navbar-brand">
             <Container>
               <Navbar.Brand href="#home">
                 <img
@@ -74,6 +75,11 @@ class App extends Component {
               </Navbar.Brand>
             </Container>
           </Link>
+
+        
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          
 
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
@@ -155,8 +161,8 @@ class App extends Component {
               </li>
             </div>
           )}
-
-        </nav>
+        </Navbar.Collapse>
+        </Navbar>
 
         <div className="container mt-3">
           <Routes>
