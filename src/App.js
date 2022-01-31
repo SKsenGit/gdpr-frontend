@@ -16,6 +16,7 @@ import BoardAdmin from "./components/board-admin.component";
 import GdprImage from "./components/gdprimage.component";
 import GdprMetadata from "./components/gdprmetadata.component"
 import ImageAnalisys from "./components/image-analysis.component"
+import ImageText from "./components/text-from-image.component"
 import logo from "./logo.svg"
 
 import { Container, Row, Navbar } from "react-bootstrap"
@@ -105,7 +106,11 @@ class App extends Component {
                 </Link>
               </li>
             </div>
-
+            <li className="nav-item">
+                <Link to={"/textfromimage"} className="nav-link">
+                  Text recognition
+                </Link>
+              </li>
 
             {showModeratorBoard && (
               <li className="nav-item">
@@ -177,6 +182,7 @@ class App extends Component {
             <Route path="/gdprimage" element={<GdprImage />} />
             <Route path="/gdprmetadata" element={<GdprMetadata />} />
             <Route path="/analysis" element={<ImageAnalisys />} />
+            <Route path="/textfromimage" element={<ImageText />} />
           </Routes>
 
         </div>
