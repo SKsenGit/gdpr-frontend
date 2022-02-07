@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { createWorker } from 'tesseract.js';
-import getEntities from '../services/spacy.service.js'
+import getEntities from '../../services/spacy.service.js'
 
 
 class ImageText extends Component {

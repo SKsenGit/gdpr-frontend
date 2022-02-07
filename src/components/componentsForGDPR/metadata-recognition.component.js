@@ -107,7 +107,7 @@ class MetadataRecognition extends Component {
         } else {
             metadataNotification = "The system did not detect any important GDPR-related metadata."
         }
-        this.props.transferData(metadata, removingData, metadataNotification);
+        this.props.callbackFunction(metadata, removingData, metadataNotification);
     }
 
     onCheckboxChange = (event) => {        
@@ -115,7 +115,7 @@ class MetadataRecognition extends Component {
         let keys = event.target.id.split(".");
         
         removingData[keys[0]][keys[1]] = event.target.checked; 
-        this.props.transferData(null,removingData);    
+        this.props.callbackFunction(null,removingData);    
 
     }
     
@@ -125,8 +125,8 @@ class MetadataRecognition extends Component {
         return ( 
             <div >
                 {this.state.detectedGDPR ?
-                    <label style = {{color:"red"}}>GDPR data are detected!</label>:
-                    <label style = {{color:"green"}}>GDPR data aren't detected!</label>                
+                    <label className="attention">GDPR data are detected!</label>:
+                    <label className="notification">GDPR data aren't detected!</label>                
                 }
                 <Metadata exif={this.state.metadata} removingData={this.state.removingData} onChange={this.onCheckboxChange} />
             </div>

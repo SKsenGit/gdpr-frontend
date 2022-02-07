@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import DragAndDrop from "./UI components/draganddrop";
+import DragAndDrop from "./../UI components/draganddrop";
 import ObjectRecognition from "./object-recognition.component"
 import MetadataRecognition from "./metadata-recognition.component"
 import { Container, Row, Col, Card, Accordion, Spinner } from "react-bootstrap"
 import piexif from "piexifjs"
 
-import '../App.css'
+import '../../App.css'
 
 class ImageAnalysis extends Component {
     constructor(props) {
@@ -17,7 +17,9 @@ class ImageAnalysis extends Component {
             metadata: null,
             removingData: null,
             metadataNotification:"default metadata notification",
-            faceRecognitionNotification: "Working..."
+            faceRecognitionNotification: "Working...",
+            textRecognitionNotification: "Working...",
+            textRecognitionHasDone:false
 
         };
     }
@@ -75,6 +77,18 @@ class ImageAnalysis extends Component {
         if (faceRecognitionNotification) {
             this.setState({
                 faceRecognitionNotification: faceRecognitionNotification
+            })
+        }
+    }
+    getTextRecognitionNotification = (textRecognitionNotification) => {
+        if (textRecognitionNotification) { 
+            if(textRecognitionNotification === "Task has done."){
+                this.setState({
+                    textRecognitionHasDone: true
+                })   
+            }            
+            this.setState({
+                textRecognitionNotification: textRecognitionNotification
             })
         }
     }
@@ -204,7 +218,9 @@ class ImageAnalysis extends Component {
                             </div>}
                         </Col>
 
-                            <Col xs={12} md={4}>
+                            <Col xs={12} md={4}>                          
+                               
+                               
                                 <Row>
                                     
                                     {this.state.image === null ?
@@ -219,21 +235,38 @@ class ImageAnalysis extends Component {
                                             </Card>}
                                          
                                 </Row>
-                               
                                 <Row>
                                     {this.state.image === null ?
                                         <div></div>:
                                             <Card>
-                                                {this.state.faceRecognitionNotification === "No GDPR related objects were detected on the image."
+                                                {this.state.faceRecognitionNotification === "No GDPR related objects (Faces) were detected on the image."
                                                  ? <Card.Header className="notification">Notification</Card.Header> 
                                                  : <Card.Header className="attention">Attention!</Card.Header> }
                                                         <Card.Body>
                                                             {this.state.faceRecognitionNotification} < br/>
-                                                            {this.state.faceRecognitionNotification === "Working..." 
+                                                            {this.state.textRecognitionNotification === "Working..." 
                                                             ? <Spinner animation="border" variant="primary" /> :<></>}
+                                                            
                                                         </Card.Body>
                                             </Card>}
                                     
+                                </Row>
+                                <Row>
+                                    
+                                    {this.state.image === null ?
+                                        <div></div>:
+                                            <Card>
+                                                {this.state.textRecognitionNotification === "No GDPR related objects (Names) were detected on the image."
+                                                 ? <Card.Header className="notification">Notification</Card.Header> 
+                                                 : <Card.Header className="attention">Attention!</Card.Header> }
+                                                        <Card.Body>
+                                                        {this.state.textRecognitionNotification} < br/>
+                                                        {this.state.textRecognitionHasDone
+                                                            ? <></>:<Spinner animation="border" variant="primary" /> }
+                                                       
+                                                        </Card.Body>
+                                            </Card>}
+                                         
                                 </Row>
                             </Col>
                        
@@ -243,25 +276,27 @@ class ImageAnalysis extends Component {
                     {this.state.startDetecting ?
                         <div >
                             <Accordion defaultActiveKey="0">
-                                <Accordion.Item eventKey="0">
-                                    <Accordion.Header className="bg-default">Faces recognition section</Accordion.Header>
-                                    <Accordion.Body className="bg-default">
-                                    <ObjectRecognition
-                                        image={document.getElementById("sourceImg")}
-                                        canvas={document.getElementById("myCanvas")}
-                                        transferData={this.getFaceRecognitionNotification}
-                                    />
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                                <Accordion.Item eventKey="1">
+                            <Accordion.Item eventKey="0">
                                     <Accordion.Header>Metadata section</Accordion.Header>
                                     <Accordion.Body className="bg-default">
                                         <MetadataRecognition
                                             file={this.state.file}
-                                            transferData={this.getMetadata}
+                                            callbackFunction={this.getMetadata}
                                         />
                                     </Accordion.Body>
                                 </Accordion.Item>
+                                <Accordion.Item eventKey="1">
+                                    <Accordion.Header className="bg-default">Objects recognition section</Accordion.Header>
+                                    <Accordion.Body className="bg-default">
+                                    <ObjectRecognition
+                                        image={document.getElementById("sourceImg")}
+                                        canvas={document.getElementById("myCanvas")}
+                                        callbackFunctionFaceRecognition={this.getFaceRecognitionNotification}
+                                        callbackFunctionTextRecognition={this.getTextRecognitionNotification}
+                                    />
+                                    </Accordion.Body>
+                                </Accordion.Item>                              
+                               
                             </Accordion>
                         </div> :
                         null

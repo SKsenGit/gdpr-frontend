@@ -6,17 +6,17 @@ import "./App.css";
 
 import AuthService from "./services/auth.service";
 
-import Login from "./components/login.component";
-import Register from "./components/register.component";
-import Home from "./components/home.component";
-import Profile from "./components/profile.component";
-import BoardUser from "./components/board-user.component";
-import BoardModerator from "./components/board-moderator.component";
-import BoardAdmin from "./components/board-admin.component";
-import GdprImage from "./components/gdprimage.component";
-import GdprMetadata from "./components/gdprmetadata.component"
-import ImageAnalisys from "./components/image-analysis.component"
-import ImageText from "./components/text-from-image.component"
+import Login from "./components/componentsForAuth/login.component";
+import Register from "./components/componentsForAuth/register.component";
+import Home from "./components/componentsByRole/home.component";
+import Profile from "./components/componentsForAuth/profile.component";
+import BoardUser from "./components/componentsByRole/board-user.component";
+import BoardModerator from "./components/componentsByRole/board-moderator.component";
+import BoardAdmin from "./components/componentsByRole/board-admin.component";
+import GdprImage from "./components/separateGDPRComponents/gdprimage.component";
+import GdprMetadata from "./components/separateGDPRComponents/gdprmetadata.component"
+import ImageAnalisys from "./components/componentsForGDPR/image-analysis.component"
+import ImageText from "./components/separateGDPRComponents/text-from-image.component"
 import logo from "./logo.svg"
 
 import { Container, Row, Navbar } from "react-bootstrap"
