@@ -56,137 +56,136 @@ class App extends Component {
       <div>
         <Container>
           <Row>
-        <Helmet>
-                <meta charSet="utf-8" />
-                <title>GDPR processing</title>
-                <meta name="description" content="GDPR data detecting and processing" />
-        </Helmet>
-        
-        <Navbar collapseOnSelect  expand="md" className="ifActiveTextColor navbar ifMenuBackgroundColor">
-        <Link to={"/"} className="navbar-brand">
-            <Container>
-              <Navbar.Brand href="#home">
-                <img
-                  src={logo}
-                  width="60"
-                  height="60"
-                  className="d-inline-block align-top"
-                  alt="React Bootstrap logo"
-                />
-              </Navbar.Brand>
-            </Container>
-          </Link>
+            <Helmet>
+              <meta charSet="utf-8" />
+              <title>GDPR processing</title>
+              <meta name="description" content="GDPR data detecting and processing" />
+            </Helmet>
 
-        
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          
-
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
+            <Navbar collapseOnSelect expand="md" className="ifActiveTextColor navbar ifMenuBackgroundColor">
+              <Link to={"/"} className="navbar-brand">
+                <Container>
+                  <Navbar.Brand href="#home">
+                    <img
+                      src={logo}
+                      width="60"
+                      height="60"
+                      className="d-inline-block align-top"
+                      alt="React Bootstrap logo"
+                    />
+                  </Navbar.Brand>
+                </Container>
               </Link>
-            </li>
-            
-            <li className="nav-item">
-              <Link to={"/analysis"} className="nav-link">
-                Image analysis
-              </Link>
-            </li>
-            <div style={{ display: "none" }}>
-              <li className="nav-item">
-                <Link to={"/gdprimage"} className="nav-link">
-                  GDPR image
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/gdprmetadata"} className="nav-link">
-                  GDPR metadata
-                </Link>
-              </li>
+
+
+              <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+              <Navbar.Collapse id="responsive-navbar-nav">
+
+
+                <div className="navbar-nav mr-auto">
+                  <li className="nav-item">
+                    <Link to={"/home"} className="nav-link">
+                      Home
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link to={"/analysis"} className="nav-link">
+                      Image analysis
+                    </Link>
+                  </li>
+                  <div style={{ display: "none" }}>
+                    <li className="nav-item">
+                      <Link to={"/gdprimage"} className="nav-link">
+                        GDPR image
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={"/gdprmetadata"} className="nav-link">
+                        GDPR metadata
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to={"/textfromimage"} className="nav-link">
+                        Text recognition
+                      </Link>
+                    </li>
+                  </div>
+                  {showModeratorBoard && (
+                    <li className="nav-item">
+                      <Link to={"/mod"} className="nav-link">
+                        Moderator Board
+                      </Link>
+                    </li>
+                  )}
+
+                  {showAdminBoard && (
+                    <li className="nav-item">
+                      <Link to={"/admin"} className="nav-link">
+                        Admin Board
+                      </Link>
+                    </li>
+                  )}
+
+                  {currentUser && (
+                    <li className="nav-item">
+                      <Link to={"/user"} className="nav-link">
+                        User
+                      </Link>
+                    </li>
+                  )}
+
+                </div>
+
+                {currentUser ? (
+                  <div className="navbar-nav ms-auto" >
+                    <li className="nav-item">
+                      <Link to={"/profile"} className="nav-link">
+                        {currentUser.username}
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/login" className="nav-link" onClick={this.logOut}>
+                        LogOut
+                      </a>
+                    </li>
+                  </div>
+                ) : (
+                  <div className="navbar-nav ms-auto">
+                    <li className="nav-item">
+                      <Link to={"/login"} className="nav-link">
+                        Login
+                      </Link>
+                    </li>
+
+                    <li className="nav-item">
+                      <Link to={"/register"} className="nav-link">
+                        Sign Up
+                      </Link>
+                    </li>
+                  </div>
+                )}
+              </Navbar.Collapse>
+            </Navbar>
+
+            <div className="container mt-3">
+              <Routes>
+                <Route exact path="/home" element={<Home />} />
+                <Route exact path="/" element={<Home />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/register" element={<Register />} />
+                <Route exact path="/profile" element={<Profile />} />
+                <Route path="/user" element={<BoardUser />} />
+                <Route path="/mod" element={<BoardModerator />} />
+                <Route path="/admin" element={<BoardAdmin />} />
+                <Route path="/gdprimage" element={<GdprImage />} />
+                <Route path="/gdprmetadata" element={<GdprMetadata />} />
+                <Route path="/analysis" element={<ImageAnalisys />} />
+                <Route path="/textfromimage" element={<ImageText />} />
+              </Routes>
+
             </div>
-            <li className="nav-item">
-                <Link to={"/textfromimage"} className="nav-link">
-                  Text recognition
-                </Link>
-              </li>
-
-            {showModeratorBoard && (
-              <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
-                </Link>
-              </li>
-            )}
-
-            {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-              </li>
-            )}
-
-          </div>
-
-          {currentUser ? (
-            <div className="navbar-nav ms-auto" >
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
-                </a>
-              </li>
-            </div>
-          ) : (
-            <div className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
-          )}
-        </Navbar.Collapse>
-        </Navbar>
-
-        <div className="container mt-3">
-          <Routes>
-            <Route exact path="/home" element={<Home />} />
-            <Route exact path="/" element={<Home />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
-            <Route exact path="/profile" element={<Profile />} />
-            <Route path="/user" element={<BoardUser />} />
-            <Route path="/mod" element={<BoardModerator />} />
-            <Route path="/admin" element={<BoardAdmin />} />
-            <Route path="/gdprimage" element={<GdprImage />} />
-            <Route path="/gdprmetadata" element={<GdprMetadata />} />
-            <Route path="/analysis" element={<ImageAnalisys />} />
-            <Route path="/textfromimage" element={<ImageText />} />
-          </Routes>
-
-        </div>
-        </Row>
+          </Row>
         </Container>
       </div>
     );
